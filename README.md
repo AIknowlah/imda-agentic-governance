@@ -157,7 +157,7 @@ imda-agentic-governance/
 │
 ├── data/
 │   └── raw/
-│       └── f_data.xlsx                # Source employee data (100 records)
+│       └── f_data.xlsx                # Synthetic employee data (100 records, AI-generated)
 │
 ├── docs/
 │   ├── Session_Progress_Report_8Mar2026.docx   # Full build log — Phases 1–3
@@ -272,9 +272,8 @@ python src/ingestion/main.py
 
 ## 👤 Author
 
-**aiknowlah**
-Agentic ETL Architect | Data Governance | AI Ethics
-Singapore 🇸🇬
+**AIknowlah**
+Agentic ETL Architect | Data Governance | AI Ethics | Singapore 🇸🇬
 
 Built as part of a professional development roadmap aligned to the
 **IMDA 2026 Model AI Governance Framework** and **WSQ ICT Skills Framework**
@@ -282,10 +281,35 @@ Built as part of a professional development roadmap aligned to the
 
 ---
 
+## 📬 Contact & Collaboration
+
+Interested in this project, AI governance consulting, or collaboration opportunities?
+
+- 💼 LinkedIn: [linkedin.com/in/aiknowlah](https://www.linkedin.com/in/aiknowlah/)
+- 🐙 GitHub: [@AIknowlah](https://github.com/AIknowlah)
+- 💬 Open a [GitHub Discussion](https://github.com/AIknowlah/imda-agentic-governance/discussions)
+
+> *Whether you are an employer, a fellow practitioner, an SME looking for AI governance*
+> *consulting, or a WSQ/TAE assessor — feel free to reach out or open a discussion.*
+
+---
+
 ## 📜 Licence
 
 This project is for educational and portfolio purposes.
-All employee data used is synthetic and does not represent real individuals.
+
+### ⚠️ Data Disclaimer
+
+The file `data/raw/f_data.xlsx` contains **100% fictitious employee records**.
+This data was **synthetically generated using the Gemini AI app** specifically
+for this project and does not represent, reference, or resemble any real individual,
+organisation, or entity.
+
+It was created solely to demonstrate the system's RBAC, HITL, and audit logging
+capabilities in a safe, privacy-preserving way — fully aligned with PDPA principles
+of data minimisation and purpose limitation.
+
+No real personal data was used at any stage of this project.
 
 ---
 
