@@ -1,0 +1,7 @@
+pandas  # Load and structure raw and excel data
+openpyxl # Load and structure raw and excel data
+langchain # Send to AI model
+langchain-community # Send to AI Model
+langchain-openai # AI model
+chromadb # data store for instant retrievel
+python-dotenv # python environment
