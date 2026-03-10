@@ -259,7 +259,6 @@ python src/ingestion/main.py
 ---
 
 ## 🗺️ Roadmap to `v1.0-compliant`
-
 - [ ] System Card / Model Card
 - [ ] Materiality Assessment
 - [ ] Incident Response Plan
@@ -267,6 +266,13 @@ python src/ingestion/main.py
 - [ ] Python test suite (7 test scripts)
 - [ ] Project Moonshot red-team results
 - [ ] Formal AI Verify Governance Report
+
+## 📋 Changelog
+
+| Version | Date | What Changed |
+|---|---|---|
+| v1.0 | March 2026 | Core pipeline complete — RBAC, HITL, BigQuery audit log, AI Verify gap analysis |
+| v1.1 | Coming soon | HITL two-person approval fix, summary-only display at gate, supervisor PIN |
 
 ---
 
