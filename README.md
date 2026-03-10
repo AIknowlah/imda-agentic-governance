@@ -295,9 +295,6 @@ Interested in this project, AI governance consulting, or collaboration opportuni
 - 🐙 GitHub: [@AIknowlah](https://github.com/AIknowlah)
 - 💬 Open a [GitHub Discussion](https://github.com/AIknowlah/imda-agentic-governance/discussions)
 
-> *Whether you are an employer, a fellow practitioner, an SME looking for AI governance*
-> *consulting, or a WSQ/TAE assessor — feel free to reach out or open a discussion.*
-
 ---
 
 ## 📜 Licence
