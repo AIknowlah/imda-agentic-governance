@@ -5,7 +5,7 @@
 [![PDPA](https://img.shields.io/badge/PDPA-Singapore%20Compliant-green)](https://www.pdpc.gov.sg)
 [![BigQuery](https://img.shields.io/badge/Google%20BigQuery-asia--southeast1-orange)](https://cloud.google.com/bigquery)
 [![Gemini](https://img.shields.io/badge/Gemini-2.5%20Flash-purple)](https://ai.google.dev)
-[![Status](https://img.shields.io/badge/Status-Work%20In%20Progress-yellow)](https://github.com/aiknowlah/imda-agentic-governance)
+[![Status](https://img.shields.io/badge/Status-v0.9%20Hardening%20In%20Progress-yellow)](https://github.com/aiknowlah/imda-agentic-governance)
 
 ---
 
@@ -18,34 +18,62 @@
 > It has been intentionally published at this stage as a **live build journal** —
 > a transparent record of a governance-first AI development approach.
 >
-> The gaps identified in this project (documented fully in
-> [`docs/AIVerify_Gap_Analysis.docx`](docs/AIVerify_Gap_Analysis.docx))
-> were **discovered through a structured self-assessment** against the official
-> **IMDA AI Verify Testing Framework (2025 Edition)** covering all 11 governance principles.
+> **Where this project currently stands:**
+> A working agentic pipeline (Phases 1–3) has been built and is functional.
+> However, a structured self-assessment has identified gaps at **two levels**:
+>
+> **Code-level gaps** (being addressed in v1.0):
+> - HITL approval is single-person and unverified — no supervisor identity check
+> - No input sanitisation against prompt injection
+> - BigQuery queries use string interpolation instead of parameterised queries
+> - No error handling around Gemini and BigQuery API calls
+> - Audit log does not capture reviewer identity or session IDs
+>
+> **Governance documentation gaps** (being addressed in v1.2–v1.5):
+> - No System Card, Materiality Assessment, or Incident Response Plan
+> - No formal bias assessment on retrieval outputs
+> - No Python test suite generating reproducibility evidence
+> - No Project Moonshot red-team results
+> - No completed AI Verify Governance Report
 >
 > Identifying and documenting gaps honestly — before claiming compliance —
 > is itself a governance best practice. This is precisely what the AI Verify
 > framework expects organisations to do.
 >
-> **The next release (`v1.0-compliant`) will close every identified gap with:**
-> - Formal governance documents (System Card, Materiality Assessment, Incident Response Plan)
-> - A Python test suite generating technical compliance evidence
-> - Project Moonshot red-team results
-> - A completed AI Verify Governance Report
->
-> *Readers are encouraged to review the Gap Analysis document to understand
-> exactly what has been built, what remains, and why.*
+> *Readers are encouraged to review the Gap Analysis document and the version
+> roadmap below to understand exactly what has been built, what remains, and why.*
 
 ---
 
 ## 📌 Build Progress
 
-| Phase | Description | Status |
-|-------|-------------|--------|
-| Phase 1 | Data Governance & Ingestion (BigQuery + Gemini Embeddings) | ✅ Complete |
-| Phase 2 | Agentic RBAC Retrieval (LangGraph Pipeline) | ✅ Complete |
-| Phase 3 | Ethics & Governance Layer (HITL + Audit Logs) | ✅ Complete |
-| Phase 4 | AI Verify Evidence Package & Formal Governance Report | 🔜 In Progress |
+| Phase | Description | Status | Notes |
+|-------|-------------|--------|-------|
+| Phase 1 | Data Governance & Ingestion (BigQuery + Gemini Embeddings) | ✅ Complete | Stable |
+| Phase 2 | Agentic RBAC Retrieval (LangGraph Pipeline) | ✅ Complete | SQL injection fix pending in v1.0 |
+| Phase 3 | Ethics & Governance Layer (HITL + Audit Logs) | 🔧 Partial | HITL is single-person CLI — supervisor verification pending in v1.1 |
+| Phase 4 | AI Verify Evidence Package & Formal Governance Report | 🔜 Not Started | Begins after v1.2 |
+
+---
+
+## 🗺️ Version Roadmap
+
+This project follows a deliberate, incremental release strategy.
+Each version is a genuine GitHub release — not a feature dump.
+The commit history is itself a governance audit trail.
+
+| Version | Focus | Key Changes | Status |
+|---------|-------|-------------|--------|
+| **v0.9** | Functional prototype | Core pipeline working — RBAC, HITL (basic), BigQuery audit log | ✅ Current |
+| **v1.0** | Harden foundations | SQL injection fix, API error handling, HITL timeout, UUID audit entries, `[AI-GENERATED]` output label, similarity score + RBAC rule in output, low similarity score warning, `.env.example` | 🔧 In Progress |
+| **v1.1** | Proper HITL | Supervisor PIN registry, two-person approval, scoped authority, auto-reject on timeout, enhanced audit log | 🔜 Planned |
+| **v1.2** | Input hardening | Prompt injection detection, rate limiting per role, query sanitisation, blocked attempt logging | 🔜 Planned |
+| **v1.3** | Test suite | `test_reproducibility.py`, `test_rbac_compliance.py`, `test_robustness.py`, `test_hitl_trigger.py`, `test_audit_log.py`, `test_adversarial.py`, `monitor_anomalies.py` | 🔜 Planned |
+| **v1.4** | Governance documents | System Card, Materiality Assessment, Acceptable Use Policy, Incident Response Plan, Bias Assessment | 🔜 Planned |
+| **v1.5** | AI Verify submission | Completed Governance Report, Project Moonshot results, evidence package, compliance README | 🔜 Planned |
+
+> **Design principle:** Each version hardens what exists before adding new capability.
+> Governance theatre — where documentation outpaces the actual system — is explicitly avoided.
 
 ---
 
@@ -92,7 +120,7 @@ User Query + Role
          ▼
 ┌─────────────────────┐
 │  human_review       │  ◄── HITL Gate: pauses if sensitive fields detected
-└────────┬────────────┘       Human must approve or reject
+└────────┬────────────┘       [v1.1: supervisor PIN + two-person rule]
          │
          ▼
 ┌─────────────────────┐
@@ -113,6 +141,11 @@ User Query + Role
 
 **Sensitive fields** (trigger HITL gate): `nric`, `ethnicity`, `medical_info`, `financial_info`, `criminal_record`
 
+> **Note on `criminal_record`:** This field is stored in BigQuery but intentionally excluded
+> from all role permission sets. No role currently has access to it. This is a deliberate
+> design decision — formal access policy for this field will be documented in the
+> System Card (v1.4).
+
 ---
 
 ## ☁️ Google Cloud Infrastructure
@@ -123,7 +156,7 @@ User Query + Role
 | Region | `asia-southeast1` (Singapore — PDPA data residency) |
 | BigQuery Dataset | `secure_rag` |
 | Tables | `employee_data`, `employee_embeddings`, `audit_log` |
-| AI Model | `gemini-2.5-flash` (generation) + `gemini-embedding-001` (embeddings) |
+| AI Model | `gemini-2.5-flash` (generation) + `gemini-embedding-001` (embeddings, 3072 dimensions) |
 
 ---
 
@@ -148,6 +181,7 @@ Python 3.11+
 imda-agentic-governance/
 ├── README.md                          # This file
 ├── requirements.txt                   # Pinned Python dependencies
+├── .env.example                       # Environment variable template [v1.0]
 ├── .gitignore                         # Protects .env and secrets
 │
 ├── src/
@@ -163,7 +197,7 @@ imda-agentic-governance/
 │   ├── Session_Progress_Report_8Mar2026.docx   # Full build log — Phases 1–3
 │   └── AIVerify_Gap_Analysis.docx              # AI Verify 11-principle gap map
 │
-└── tests/                             # 🔜 Phase 4: Python test suite (coming)
+└── tests/                             # 🔜 v1.3: Python test suite
     └── .gitkeep
 ```
 
@@ -175,13 +209,13 @@ This project is designed against the
 [IMDA 2026 Model AI Governance Framework for Agentic AI](https://aiverifyfoundation.sg)
 and the [AI Verify Testing Framework (2025 Edition)](https://aiverifyfoundation.sg).
 
-| IMDA Requirement | Implementation |
-|-----------------|----------------|
-| Bounded Autonomy | LangGraph StateGraph — agent cannot act outside defined nodes |
-| Least-Privilege Data Access | RBAC strips all fields not explicitly permitted per role |
-| Meaningful Human Control | HITL gate pauses pipeline; human must approve sensitive data release |
-| Transparency & Auditability | Every query logged to BigQuery `audit_log` with full decision trail |
-| Data Residency (PDPA) | All data stored in `asia-southeast1` Singapore region |
+| IMDA Requirement | Implementation | Maturity |
+|-----------------|----------------|---------|
+| Bounded Autonomy | LangGraph StateGraph — agent cannot act outside defined nodes | ✅ Implemented |
+| Least-Privilege Data Access | RBAC strips all fields not explicitly permitted per role | ✅ Implemented |
+| Meaningful Human Control | HITL gate pauses pipeline; human must approve sensitive data release | 🔧 Basic — supervisor verification in v1.1 |
+| Transparency & Auditability | Every query logged to BigQuery `audit_log` with full decision trail | 🔧 Partial — reviewer identity and session ID added in v1.0 |
+| Data Residency (PDPA) | All data stored in `asia-southeast1` Singapore region | ✅ Implemented |
 
 ---
 
@@ -192,21 +226,33 @@ See [`docs/AIVerify_Gap_Analysis.docx`](docs/AIVerify_Gap_Analysis.docx) for the
 
 **Current readiness summary:**
 
-| Principle | Readiness |
-|-----------|-----------|
-| 1. Transparency | Medium |
-| 2. Explainability | High |
-| 3. Reproducibility | Low |
-| 4. Safety | Low |
-| 5. Security | Low |
-| 6. Robustness | Low |
-| 7. Fairness | Low |
-| 8. Data Governance | **High** |
-| 9. Accountability | Low |
-| 10. Human Agency & Oversight | **High** |
-| 11. Inclusive Growth | Low |
+| Principle | Readiness | Target Version |
+|-----------|-----------|---------------|
+| 1. Transparency | Medium | v1.4 |
+| 2. Explainability | High | — |
+| 3. Reproducibility | Low | v1.3 |
+| 4. Safety | Low | v1.2 |
+| 5. Security | Low | v1.0 / v1.2 |
+| 6. Robustness | Low | v1.0 |
+| 7. Fairness | Low | v1.4 |
+| 8. Data Governance | **Medium** | v1.4 |
+| 9. Accountability | Low | v1.0 / v1.1 |
+| 10. Human Agency & Oversight | **Medium** | v1.1 |
+| 11. Inclusive Growth | Low | v1.4 |
 
-The `v1.0-compliant` release will address all gaps identified.
+---
+
+## 🤔 Model Selection Rationale
+
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| Embedding model | `gemini-embedding-001` | Google's latest embedding model — 3072 dimensions, strongest semantic retrieval performance available via AI Studio |
+| Generation model | `gemini-2.5-flash` | Best balance of capability and cost for a prototype; fast inference suitable for interactive pipeline |
+| Database | Google BigQuery | Enterprise-grade, cloud-native, Singapore-hosted, queryable audit logs — appropriate for PDPA-aligned production system |
+| Cloud provider | Google Cloud (`asia-southeast1`) | PDPA data residency requirement — personal data of Singapore residents must remain in Singapore |
+| API access | Google AI Studio | Vertex AI requires billing enabled; AI Studio provides free Gemini API access suitable for prototyping without credit card |
+| Vector search | Python cosine similarity | BigQuery standard tier lacks native vector search; Python cosine similarity is sufficient and transparent for 100-record datasets |
+| Pipeline framework | LangGraph StateGraph | Enforces bounded autonomy — agent cannot act outside defined nodes, satisfying IMDA 2026 agentic AI governance requirement |
 
 ---
 
@@ -233,8 +279,9 @@ python -m venv .venv
 # Install dependencies
 pip install -r requirements.txt
 
-# Create .env file (never commit this)
-echo GOOGLE_API_KEY=your_key_here > .env
+# Create .env file from template (never commit this)
+cp .env.example .env
+# Then edit .env and add your GOOGLE_API_KEY
 ```
 
 ### Running the Pipeline
@@ -258,15 +305,17 @@ python src/ingestion/main.py
 
 ---
 
-## 🗺️ Roadmap to `v1.0-compliant`
+## 📋 Changelog
 
-- [ ] System Card / Model Card
-- [ ] Materiality Assessment
-- [ ] Incident Response Plan
-- [ ] Acceptable Use Policy
-- [ ] Python test suite (7 test scripts)
-- [ ] Project Moonshot red-team results
-- [ ] Formal AI Verify Governance Report
+| Version | Date | Status | What Changed |
+|---------|------|--------|-------------|
+| v0.9 | March 2026 | ✅ Current | Core pipeline complete — RBAC, basic HITL, BigQuery audit log, AI Verify gap analysis published |
+| v1.0 | Coming soon | 🔧 In Progress | SQL injection fix, API error handling, HITL timeout, UUID audit entries, `[AI-GENERATED]` output label, similarity score + RBAC rule printed in output, low similarity warning (score < 0.3), `.env.example`, code cleanup |
+| v1.1 | Planned | 🔜 | Supervisor PIN registry, two-person HITL approval, auto-reject on timeout, enhanced audit log with reviewer identity |
+| v1.2 | Planned | 🔜 | Prompt injection detection, rate limiting per role, query sanitisation |
+| v1.3 | Planned | 🔜 | Python test suite — `test_reproducibility.py`, `test_rbac_compliance.py`, `test_robustness.py`, `test_hitl_trigger.py`, `test_audit_log.py`, `test_adversarial.py`, `monitor_anomalies.py` |
+| v1.4 | Planned | 🔜 | System Card, Materiality Assessment, Acceptable Use Policy, Incident Response Plan, Bias Assessment |
+| v1.5 | Planned | 🔜 | AI Verify Governance Report, Project Moonshot red-team results, full evidence package |
 
 ---
 
@@ -288,9 +337,6 @@ Interested in this project, AI governance consulting, or collaboration opportuni
 - 💼 LinkedIn: [linkedin.com/in/aiknowlah](https://www.linkedin.com/in/aiknowlah/)
 - 🐙 GitHub: [@AIknowlah](https://github.com/AIknowlah)
 - 💬 Open a [GitHub Discussion](https://github.com/AIknowlah/imda-agentic-governance/discussions)
-
-> *Whether you are an employer, a fellow practitioner, an SME looking for AI governance*
-> *consulting, or a WSQ/TAE assessor — feel free to reach out or open a discussion.*
 
 ---
 
