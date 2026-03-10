@@ -522,7 +522,7 @@ def build_graph() -> StateGraph:
     """
 
     graph = StateGraph(AgentState)
-
+    # Add the nodes
     graph.add_node("validate_role", node_validate_role)
     graph.add_node("embed_query",   node_embed_query)
     graph.add_node("retrieve",      node_retrieve)
@@ -537,13 +537,13 @@ def build_graph() -> StateGraph:
         route_after_validation,
         {"embed_query": "embed_query", "output": "output"}
     )
-
+    # Add the edges — the fixed path
     graph.add_edge("embed_query",  "retrieve")
     graph.add_edge("retrieve",     "enforce_rbac")
     graph.add_edge("enforce_rbac", "human_review")
     graph.add_edge("human_review", "output")
     graph.add_edge("output",        END)
-
+    # Compile and lock it
     return graph.compile()
 
 
