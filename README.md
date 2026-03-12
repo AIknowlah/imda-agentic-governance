@@ -5,7 +5,7 @@
 [![PDPA](https://img.shields.io/badge/PDPA-Singapore%20Compliant-green)](https://www.pdpc.gov.sg)
 [![BigQuery](https://img.shields.io/badge/Google%20BigQuery-asia--southeast1-orange)](https://cloud.google.com/bigquery)
 [![Gemini](https://img.shields.io/badge/Gemini-2.5%20Flash-purple)](https://ai.google.dev)
-[![Status](https://img.shields.io/badge/Status-v0.9%20Hardening%20In%20Progress-yellow)](https://github.com/aiknowlah/imda-agentic-governance)
+[![Status](https://img.shields.io/badge/Status-v1.0%20Complete-brightgreen)](https://github.com/aiknowlah/imda-agentic-governance)
 
 ---
 
@@ -22,12 +22,15 @@
 > A working agentic pipeline (Phases 1–3) has been built and is functional.
 > However, a structured self-assessment has identified gaps at **two levels**:
 >
-> **Code-level gaps** (being addressed in v1.0):
-> - HITL approval is single-person and unverified — no supervisor identity check
-> - No input sanitisation against prompt injection
-> - BigQuery queries use string interpolation instead of parameterised queries
-> - No error handling around Gemini and BigQuery API calls
-> - Audit log does not capture reviewer identity or session IDs
+> **Code-level gaps — resolved in v1.0 ✅:**
+> - SQL injection risk — fixed with parameterised BigQuery queries
+> - No error handling — all Gemini and BigQuery calls now wrapped in try/except
+> - Audit log missing session IDs — UUID request_id now generated per query
+> - HITL no timeout — auto-reject after 5 minutes now implemented
+> - Output not labelled — [AI-GENERATED] label now on all results
+>
+> **Remaining code-level gap (being addressed in v1.1):**
+> - HITL approval is single-person and unverified — supervisor PIN registry coming in v1.1
 >
 > **Governance documentation gaps** (being addressed in v1.2–v1.5):
 > - No System Card, Materiality Assessment, or Incident Response Plan
@@ -50,8 +53,8 @@
 | Phase | Description | Status | Notes |
 |-------|-------------|--------|-------|
 | Phase 1 | Data Governance & Ingestion (BigQuery + Gemini Embeddings) | ✅ Complete | Stable |
-| Phase 2 | Agentic RBAC Retrieval (LangGraph Pipeline) | ✅ Complete | SQL injection fix pending in v1.0 |
-| Phase 3 | Ethics & Governance Layer (HITL + Audit Logs) | 🔧 Partial | HITL is single-person CLI — supervisor verification pending in v1.1 |
+| Phase 2 | Agentic RBAC Retrieval (LangGraph Pipeline) | ✅ Complete | SQL injection fixed in v1.0 |
+| Phase 3 | Ethics & Governance Layer (HITL + Audit Logs) | 🔧 Partial | HITL hardened in v1.0 — supervisor PIN verification coming in v1.1 |
 | Phase 4 | AI Verify Evidence Package & Formal Governance Report | 🔜 Not Started | Begins after v1.2 |
 
 ---
@@ -64,9 +67,9 @@ The commit history is itself a governance audit trail.
 
 | Version | Focus | Key Changes | Status |
 |---------|-------|-------------|--------|
-| **v0.9** | Functional prototype | Core pipeline working — RBAC, HITL (basic), BigQuery audit log | ✅ Current |
-| **v1.0** | Harden foundations | SQL injection fix, API error handling, HITL timeout, UUID audit entries, `[AI-GENERATED]` output label, similarity score + RBAC rule in output, low similarity score warning, `.env.example` | 🔧 In Progress |
-| **v1.1** | Proper HITL | Supervisor PIN registry, two-person approval, scoped authority, auto-reject on timeout, enhanced audit log | 🔜 Planned |
+| **v0.9** | Functional prototype | Core pipeline working — RBAC, HITL (basic), BigQuery audit log | ✅ Complete |
+| **v1.0** | Harden foundations | SQL injection fix, API error handling, HITL timeout, UUID audit entries, `[AI-GENERATED]` output label, similarity score + RBAC rule in output, low similarity score warning, `.env.example` | ✅ Complete |
+| **v1.1** | Proper HITL | Supervisor PIN registry, two-person approval, scoped authority, auto-reject on timeout, enhanced audit log | 🔧 In Progress |
 | **v1.2** | Input hardening | Prompt injection detection, rate limiting per role, query sanitisation, blocked attempt logging | 🔜 Planned |
 | **v1.3** | Test suite | `test_reproducibility.py`, `test_rbac_compliance.py`, `test_robustness.py`, `test_hitl_trigger.py`, `test_audit_log.py`, `test_adversarial.py`, `monitor_anomalies.py` | 🔜 Planned |
 | **v1.4** | Governance documents | System Card, Materiality Assessment, Acceptable Use Policy, Incident Response Plan, Bias Assessment | 🔜 Planned |
@@ -214,7 +217,7 @@ and the [AI Verify Testing Framework (2025 Edition)](https://aiverifyfoundation.
 | Bounded Autonomy | LangGraph StateGraph — agent cannot act outside defined nodes | ✅ Implemented |
 | Least-Privilege Data Access | RBAC strips all fields not explicitly permitted per role | ✅ Implemented |
 | Meaningful Human Control | HITL gate pauses pipeline; human must approve sensitive data release | 🔧 Basic — supervisor verification in v1.1 |
-| Transparency & Auditability | Every query logged to BigQuery `audit_log` with full decision trail | 🔧 Partial — reviewer identity and session ID added in v1.0 |
+| Transparency & Auditability | Every query logged to BigQuery `audit_log` — UUID request_id, RBAC rule, similarity score all captured | ✅ Implemented |
 | Data Residency (PDPA) | All data stored in `asia-southeast1` Singapore region | ✅ Implemented |
 
 ---
@@ -232,11 +235,11 @@ See [`docs/AIVerify_Gap_Analysis.docx`](docs/AIVerify_Gap_Analysis.docx) for the
 | 2. Explainability | High | — |
 | 3. Reproducibility | Low | v1.3 |
 | 4. Safety | Low | v1.2 |
-| 5. Security | Low | v1.0 / v1.2 |
-| 6. Robustness | Low | v1.0 |
+| 5. Security | **Medium** | v1.2 |
+| 6. Robustness | **Medium** | v1.2 |
 | 7. Fairness | Low | v1.4 |
 | 8. Data Governance | **Medium** | v1.4 |
-| 9. Accountability | Low | v1.0 / v1.1 |
+| 9. Accountability | **Medium** | v1.1 |
 | 10. Human Agency & Oversight | **Medium** | v1.1 |
 | 11. Inclusive Growth | Low | v1.4 |
 
@@ -301,7 +304,7 @@ python src/ingestion/main.py
 | Document | Description |
 |----------|-------------|
 | [Session Progress Report](docs/Session_Progress_Report_8Mar2026.docx) | Detailed build log of all work completed in Phases 1–3 |
-| [AI Verify Gap Analysis](docs/AIVerify_Gap_Analysis.docx) | Full 11-principle gap map with prioritised action plan |
+| [AI Verify Gap Analysis — v0.9 Baseline](docs/AIVerify_Gap_Analysis_v0.9.docx) | Full 11-principle gap map with prioritised action plan |
 
 ---
 
@@ -309,9 +312,9 @@ python src/ingestion/main.py
 
 | Version | Date | Status | What Changed |
 |---------|------|--------|-------------|
-| v0.9 | March 2026 | ✅ Current | Core pipeline complete — RBAC, basic HITL, BigQuery audit log, AI Verify gap analysis published |
-| v1.0 | Coming soon | 🔧 In Progress | SQL injection fix, API error handling, HITL timeout, UUID audit entries, `[AI-GENERATED]` output label, similarity score + RBAC rule printed in output, low similarity warning (score < 0.3), `.env.example`, code cleanup |
-| v1.1 | Planned | 🔜 | Supervisor PIN registry, two-person HITL approval, auto-reject on timeout, enhanced audit log with reviewer identity |
+| v0.9 | 8 Mar 2026 | ✅ Complete | Core pipeline complete — RBAC, basic HITL, BigQuery audit log, AI Verify gap analysis published |
+| v1.0 | 12 Mar 2026 | ✅ Complete | SQL injection fix, API error handling, HITL timeout, UUID audit entries, `[AI-GENERATED]` output label, similarity score + RBAC rule printed in output, low similarity warning (score < 0.3), `.env.example`, access_* fields removed |
+| v1.1 | In Progress | 🔧 | Supervisor PIN registry, two-person HITL approval, auto-reject on timeout, enhanced audit log with reviewer identity |
 | v1.2 | Planned | 🔜 | Prompt injection detection, rate limiting per role, query sanitisation |
 | v1.3 | Planned | 🔜 | Python test suite — `test_reproducibility.py`, `test_rbac_compliance.py`, `test_robustness.py`, `test_hitl_trigger.py`, `test_audit_log.py`, `test_adversarial.py`, `monitor_anomalies.py` |
 | v1.4 | Planned | 🔜 | System Card, Materiality Assessment, Acceptable Use Policy, Incident Response Plan, Bias Assessment |
