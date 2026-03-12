@@ -335,7 +335,7 @@ Built as part of a professional development roadmap aligned to the
 
 ## 📬 Contact & Collaboration
 
-Interested in this project, AI governance consulting, or collaboration opportunities?
+Interested in this project, willing to teach and correct me on how things can be done better?
 
 - 💼 LinkedIn: [linkedin.com/in/aiknowlah](https://www.linkedin.com/in/aiknowlah/)
 - 🐙 GitHub: [@AIknowlah](https://github.com/AIknowlah)
