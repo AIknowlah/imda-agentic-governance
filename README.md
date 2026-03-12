@@ -327,9 +327,9 @@ python src/ingestion/main.py
 **AIknowlah**
 Agentic ETL Architect | Data Governance | AI Ethics | Singapore 🇸🇬
 
-Built as part of a professional development roadmap aligned to the
-**IMDA 2026 Model AI Governance Framework** and **WSQ ICT Skills Framework**
-(Data Governance and AI System Design tracks).
+Built as part of a personal professional development roadmap in 
+AI governance, aligned to the IMDA 2026 Model AI Governance Framework 
+for Agentic AI and the AI Verify Testing Framework (2025 Edition).
 
 ---
 
