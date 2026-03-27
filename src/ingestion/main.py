@@ -47,6 +47,9 @@ from typing import TypedDict, Optional, List
 from google import genai
 from google.cloud import bigquery
 from langgraph.graph import StateGraph, END
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+from src.hitl.hitl_gate import run_hitl_gate
 
 # uuid: Generates unique request IDs for every audit log entry.    [FIX 3]
 # signal: Used to implement the HITL timeout mechanism.            [FIX 4]
@@ -450,18 +453,61 @@ def node_enforce_rbac(state: AgentState) -> AgentState:
 
 def node_human_review(state: AgentState) -> AgentState:
     """
-    HITL GATE: Pauses pipeline if sensitive fields are in the results.
-    Human reviewer approves or rejects before results are released.
-
-    [FIX 4] Auto-rejects after HITL_TIMEOUT_SECONDS (5 minutes).
-             Timeout always means REJECT — never auto-approve.
-
-    Satisfies IMDA 2026 Meaningful Human Control requirement.
-    NOTE: Full supervisor PIN redesign and summary-only preview coming in v1.1.
+    HITL GATE v1.1: Two-person governance mechanism.
+    Calls hitl_gate.py which enforces:
+      - Summary-only preview (no field values shown to requester)
+      - Supervisor ID + PIN verification
+      - Two-person rule (requester cannot approve own query)
+      - Three-strike lockout
+      - Gmail escalation to manager on lockout
+      - Full audit trail
     """
 
     if state.get("error"):
         return state
+
+    # --- CHECK FOR SENSITIVE FIELDS ---
+    fields_in_results = {
+        key
+        for record in state["filtered_results"]
+        for key in record.keys()
+        if not key.startswith("_")
+    }
+
+    triggered_fields = fields_in_results & SENSITIVE_FIELDS
+
+    if not triggered_fields:
+        state["hitl_triggered"]              = False
+        state["hitl_decision"]               = None
+        state["audit_log"]["hitl_triggered"] = False
+        state["audit_log"]["hitl_decision"]  = "N/A - No sensitive fields"
+        state["audit_log"]["hitl_timeout"]   = False
+        print("[HITL] No sensitive fields detected. Proceeding automatically.")
+        return state
+
+    # --- SENSITIVE FIELDS DETECTED — CALL v1.1 HITL GATE ---
+    state["hitl_triggered"]              = True
+    state["audit_log"]["hitl_triggered"] = True
+
+    # Run the full two-person governance gate
+    updated_audit_log = run_hitl_gate(
+        bq_client        = bq_client,
+        request_id       = state["request_id"],
+        requester_role   = state["user_role"],
+        query            = state["query"],
+        filtered_results = state["filtered_results"],
+        triggered_fields = triggered_fields,
+        audit_log        = state["audit_log"]
+    )
+
+    state["audit_log"]    = updated_audit_log
+    state["hitl_decision"] = updated_audit_log.get("hitl_decision")
+
+    # If rejected — set error to block output node from showing results
+    if state["hitl_decision"] != "approve":
+        state["error"] = updated_audit_log.get("decision", "DENIED by HITL gate")
+
+    return state
 
     # --- CHECK FOR SENSITIVE FIELDS ---
     fields_in_results = {
@@ -686,8 +732,8 @@ def build_graph() -> StateGraph:
 if __name__ == "__main__":
 
     print("=" * 60)
-    print("  AGENTIC ETL GATEKEEPER — v1.0")
-    print("  Gemini 2.5 Flash + BigQuery + RBAC + HITL")
+    print("  AGENTIC ETL GATEKEEPER — v1.1")
+    print("  Gemini 2.5 Flash + BigQuery + RBAC + HITL + Two-Person Governance")
     print("  IMDA 2026 Aligned | PDPA Singapore")
     print("=" * 60)
 

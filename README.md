@@ -313,8 +313,8 @@ python src/ingestion/main.py
 | Version | Date | Status | What Changed |
 |---------|------|--------|-------------|
 | v0.9 | 8 Mar 2026 | ✅ Complete | Core pipeline complete — RBAC, basic HITL, BigQuery audit log, AI Verify gap analysis published |
-| v1.0 | 12 Mar 2026 | ✅ Complete | SQL injection fix, API error handling, HITL timeout, UUID audit entries, `[AI-GENERATED]` output label, similarity score + RBAC rule printed in output, low similarity warning (score < 0.3), `.env.example`, access_* fields removed |
-| v1.1 | In Progress | 🔧 | Supervisor PIN registry, two-person HITL approval, auto-reject on timeout, enhanced audit log with reviewer identity |
+| v1.0 | 12 Mar 2026 | Core pipeline complete — RBAC, HITL, BigQuery audit log, AI Verify gap analysis |
+| v1.1 | 27 Mar 2026 | Two-person HITL gate — supervisor PIN, three-strike lockout, Gmail escalation |
 | v1.2 | Planned | 🔜 | Prompt injection detection, rate limiting per role, query sanitisation |
 | v1.3 | Planned | 🔜 | Python test suite — `test_reproducibility.py`, `test_rbac_compliance.py`, `test_robustness.py`, `test_hitl_trigger.py`, `test_audit_log.py`, `test_adversarial.py`, `monitor_anomalies.py` |
 | v1.4 | Planned | 🔜 | System Card, Materiality Assessment, Acceptable Use Policy, Incident Response Plan, Bias Assessment |
