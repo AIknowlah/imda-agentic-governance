@@ -1,23 +1,34 @@
-# 📁 Evidence — v0.9 Known Flaws
+# 📁 Evidence — Governance Flaw Documentation & Fix Verification
 
-This folder contains visual evidence of flaws and gaps identified at **v0.9**
-through structured self-assessment against the IMDA AI Verify Testing Framework
-(2025 Edition).
+This folder contains visual evidence of flaws identified and fixes verified
+across each version of the Agentic ETL Architect project.
 
-These screenshots were captured **before remediation** — deliberately preserving
-the evidence of what was found, when it was found, and how it was documented.
+Evidence is captured through structured self-assessment against the
+**IMDA AI Verify Testing Framework (2025 Edition)**.
 
-Identifying and evidencing flaws before fixing them is a core governance
+Identifying and evidencing flaws **before** fixing them is a core governance
 practice. It demonstrates that compliance is earned through process, not claimed
 through assertion.
 
 ---
 
-## 📸 Screenshots in This Folder
+## 🗂️ Evidence Index — All Versions
+
+| Version | Folder | Status | Contents |
+|---------|--------|--------|----------|
+| v0.9 | `evidence/v0.9/` | ✅ Complete | HITL data exposure flaw documented |
+| v1.0 | `evidence/v1.0/` | 🔜 Planned | SQL injection fix, error handling, UUID audit log |
+| v1.1 | `evidence/v1.1/` | ✅ Complete | Supervisor PIN working, two-person approval, summary-only preview verified |
+| v1.2 | `evidence/v1.2/` | 🔜 Planned | Prompt injection blocked, rate limiting active |
+| v1.3 | `evidence/v1.3/` | 🔜 Planned | Test suite passing — all 7 scripts |
+| v1.4 | `evidence/v1.4/` | 🔜 Planned | Governance documents completed |
+| v1.5 | `evidence/v1.5/` | 🔜 Planned | AI Verify Governance Report — final submission |
 
 ---
 
-### 1. `v0.9_HITL_flaw_data_visible_before_approval.png`
+## 📸 v0.9 Evidence
+
+### `v0.9_HITL_flaw_data_visible_before_approval.png`
 
 | Field | Detail |
 |-------|--------|
@@ -56,32 +67,50 @@ The reviewer should see only a **summary** at the gate:
 Full field values should only be released **after** the reviewer approves,
 and only to the original requester — not displayed at the gate itself.
 
-**Remediation planned:**
+**Remediation delivered in v1.1:**
 
-| Step | Version | Description |
-|------|---------|-------------|
-| Summary-only preview at gate | v1.1 | Reviewer sees categories, not values |
-| Supervisor PIN verification | v1.1 | Reviewer identity verified before decision |
-| Two-person approval rule | v1.1 | Requester and approver must be different people |
-| Auto-reject on timeout | v1.1 | No indefinite pipeline freeze |
-| Reviewer identity in audit log | v1.1 | Who approved is permanently recorded |
+| Step | Version | Status | Description |
+|------|---------|--------|-------------|
+| Summary-only preview at gate | v1.1 | ✅ Done | Reviewer sees field names only — values hidden |
+| Supervisor PIN verification | v1.1 | ✅ Done | SHA-256 hashed PIN verified against BigQuery |
+| Two-person approval rule | v1.1 | ✅ Done | Requester cannot approve their own query |
+| Three-strike lockout | v1.1 | ✅ Done | Account locked after 3 wrong PINs |
+| Gmail escalation to manager | v1.1 | ✅ Done | Automatic email sent on lockout |
+| Reviewer identity in audit log | v1.1 | ✅ Done | Supervisor ID recorded in BigQuery audit_log |
 
 ---
 
-## 🗂️ Evidence Index — All Versions
+## 📸 v1.1 Evidence
 
-As the project progresses, each version folder will contain its own evidence
-of both **flaws identified** and **fixes verified**.
+### `v1.1_HITL_fix_summary_only_preview.png`
 
-| Version | Folder | Contents |
-|---------|--------|----------|
-| v0.9 | `evidence/v0.9/` | ✅ HITL data exposure flaw |
-| v1.0 | `evidence/v1.0/` | 🔜 SQL injection fix, error handling, UUID audit log |
-| v1.1 | `evidence/v1.1/` | 🔜 Supervisor PIN working, two-person approval, timeout |
-| v1.2 | `evidence/v1.2/` | 🔜 Prompt injection blocked, rate limiting active |
-| v1.3 | `evidence/v1.3/` | 🔜 Test suite passing — all 7 scripts |
-| v1.4 | `evidence/v1.4/` | 🔜 Governance documents completed |
-| v1.5 | `evidence/v1.5/` | 🔜 AI Verify Governance Report — final submission |
+| Field | Detail |
+|-------|--------|
+| **Version captured** | v1.1 |
+| **Date verified** | 27 March 2026 |
+| **Fix type** | Summary-only preview at HITL gate |
+| **AI Verify principle** | Principle 10 — Human Agency & Oversight |
+| **Severity** | ✅ Resolved |
+| **Replaces flaw in** | v0.9 |
+
+**What this screenshot shows:**
+
+The v1.1 HITL gate displays **field names only** — no actual values are shown
+at the review screen. The reviewer sees which sensitive field categories are
+involved and how many records are pending, but cannot read any sensitive data
+until after approval.
+
+**Evidence of fix:**
+
+- Sensitive field values (NRIC, ethnicity) are hidden at the gate
+- Supervisor must enter their ID and PIN before any decision is made
+- Two-person rule prevents the requester from approving their own query
+- Results are only released to the original requester after approval
+
+> 📌 **Note:** Add screenshot `v1.1_HITL_fix_summary_only_preview.png` to this
+> folder showing the v1.1 HITL gate with summary-only preview working.
+> Capture a terminal screenshot showing field names displayed without values
+> at the HITL gate prompt.
 
 ---
 
