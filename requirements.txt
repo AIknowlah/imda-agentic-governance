@@ -1,7 +1,10 @@
-pandas  # Load and structure raw and excel data
-openpyxl # Load and structure raw and excel data
-langchain # Send to AI model
-langchain-community # Send to AI Model
-langchain-openai # AI model
-chromadb # data store for instant retrievel
-python-dotenv # python environment
+pandas                    # Load and structure raw Excel data
+openpyxl                  # pandas dependency for reading .xlsx files
+python-dotenv             # Load API keys from .env file
+google-genai              # Gemini API — embeddings and generation
+google-cloud-bigquery     # BigQuery client — data storage and audit logs
+langgraph                 # Agentic pipeline — LangGraph StateGraph
+numpy                     # Cosine similarity calculation
+google-auth-oauthlib      # Gmail OAuth 2.0 authentication flow
+google-auth-httplib2      # Gmail HTTP transport layer
+google-api-python-client  # Gmail API client — sends escalation emails
