@@ -16,3 +16,4 @@ docs/Session_Progress_Report_*.docx
 docs/Project_Study_Notes*.docx
 credentials.json
 token.json
+.~lock.*
