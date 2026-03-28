@@ -1,10 +1,10 @@
-pandas                    # Load and structure raw Excel data
-openpyxl                  # pandas dependency for reading .xlsx files
-python-dotenv             # Load API keys from .env file
-google-genai              # Gemini API — embeddings and generation
-google-cloud-bigquery     # BigQuery client — data storage and audit logs
-langgraph                 # Agentic pipeline — LangGraph StateGraph
-numpy                     # Cosine similarity calculation
-google-auth-oauthlib      # Gmail OAuth 2.0 authentication flow
-google-auth-httplib2      # Gmail HTTP transport layer
-google-api-python-client  # Gmail API client — sends escalation emails
+pandas==3.0.1                    # Load and structure raw Excel data
+openpyxl==3.1.5                  # pandas dependency for reading .xlsx files
+python-dotenv==1.2.2             # Load API keys from .env file
+google-genai==1.66.0             # Gemini API — embeddings and generation
+google-cloud-bigquery==3.40.1    # BigQuery client — data storage and audit logs
+langgraph==1.0.10                # Agentic pipeline — LangGraph StateGraph
+numpy==2.4.2                     # Cosine similarity calculation
+google-auth-oauthlib==1.3.0      # Gmail OAuth 2.0 authentication flow
+google-auth-httplib2==0.3.0      # Gmail HTTP transport layer
+google-api-python-client==2.193.0  # Gmail API client — sends escalation emails
