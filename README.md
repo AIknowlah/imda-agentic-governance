@@ -19,7 +19,7 @@
 > a transparent record of a governance-first AI development approach.
 >
 > The gaps identified in this project (documented fully in
-> [`docs/AIVerify_Gap_Analysis.docx`](docs/AIVerify_Gap_Analysis.docx))
+> [`docs/AIVerify_Gap_Analysis_v1_1.docx`](docs/AIVerify_Gap_Analysis_v1_1.docx))
 > were **discovered through a structured self-assessment** against the official
 > **IMDA AI Verify Testing Framework (2025 Edition)** covering all 11 governance principles.
 >
@@ -151,27 +151,31 @@ Python 3.11+
 
 ```
 imda-agentic-governance/
-├── README.md                          # This file
-├── requirements.txt                   # Pinned Python dependencies
-├── .gitignore                         # Protects .env and secrets
+├── README.md                              # This file
+├── requirements.txt                       # Pinned Python dependencies
+├── .gitignore                             # Protects .env and secrets
 │
 ├── src/
 │   ├── ingestion/
-│   │   ├── processor.py               # Phase 1: Data ingestion + Gemini embeddings
-│   │   ├── main.py                    # Phase 2 & 3: Agent pipeline (RBAC + HITL)
-│   │   └── setup_supervisors.py       # v1.1: Creates supervisor/manager tables
+│   │   ├── processor.py                   # Phase 1: Data ingestion + Gemini embeddings
+│   │   ├── main.py                        # Phase 2 & 3: Agent pipeline (RBAC + HITL)
+│   │   └── setup_supervisors.py           # v1.1: Creates supervisor/manager tables
 │   └── hitl/
-│       └── hitl_gate.py               # v1.1: Two-person HITL governance module
+│       └── hitl_gate.py                   # v1.1: Two-person HITL governance module
 │
 ├── data/
 │   └── raw/
-│       └── f_data.xlsx                # Synthetic employee data (100 records, AI-generated)
+│       └── f_data.xlsx                    # Synthetic employee data (100 records)
 │
 ├── docs/
-│   ├── Session_Progress_Report_12Mar2026.docx  # Full build log — v1.0
-│   └── AIVerify_Gap_Analysis.docx              # AI Verify 11-principle gap map
+│   ├── AIVerify_Gap_Analysis_v1_1.docx    # AI Verify gap map — current (v1.1)
+│   ├── AIVerify_Gap_Analysis_v0_9.docx    # AI Verify gap map — baseline (v0.9)
+│   └── evidence/
+│       ├── v0.9/                          # HITL data exposure flaw documented
+│       ├── v1.0/                          # Output labels, UUID, RBAC rule verified
+│       └── v1.1/                          # Summary-only HITL preview verified
 │
-└── tests/                             # 🔜 Phase 4: Python test suite (coming)
+└── tests/                                 # 🔜 Phase 4: Python test suite (coming)
     └── .gitkeep
 ```
 
@@ -196,7 +200,8 @@ and the [AI Verify Testing Framework (2025 Edition)](https://aiverifyfoundation.
 ## 📋 AI Verify Gap Analysis
 
 A full gap analysis against all 11 AI Verify principles has been completed.
-See [`docs/AIVerify_Gap_Analysis.docx`](docs/AIVerify_Gap_Analysis.docx) for the detailed report.
+See [`docs/AIVerify_Gap_Analysis_v1_1.docx`](docs/AIVerify_Gap_Analysis_v1_1.docx) for the current report.
+The original baseline assessment is preserved at [`docs/AIVerify_Gap_Analysis_v0_9.docx`](docs/AIVerify_Gap_Analysis_v0_9.docx).
 
 **Current readiness summary:**
 
@@ -213,6 +218,24 @@ See [`docs/AIVerify_Gap_Analysis.docx`](docs/AIVerify_Gap_Analysis.docx) for the
 | 9. Accountability | Medium | **High ↑** | v1.1 ✅ |
 | 10. Human Agency & Oversight | Medium | **High ↑** | v1.1 ✅ |
 | 11. Inclusive Growth | Low | Low | v1.4 |
+
+---
+
+## 🔍 Evidence Trail
+
+This project maintains a versioned evidence trail documenting both flaws identified
+and fixes verified at each release. Evidence is captured before and after remediation
+— demonstrating that compliance is earned through process, not claimed through assertion.
+
+| Version | Folder | Status | Contents |
+|---------|--------|--------|----------|
+| v0.9 | `docs/evidence/v0.9/` | ✅ Complete | HITL data exposure flaw documented |
+| v1.0 | `docs/evidence/v1.0/` | ✅ Complete | Output labels, UUID request ID, RBAC rule verified |
+| v1.1 | `docs/evidence/v1.1/` | ✅ Complete | Supervisor PIN, two-person approval, summary-only preview verified |
+| v1.2 | `docs/evidence/v1.2/` | 🔜 Planned | Prompt injection blocked, rate limiting active |
+| v1.3 | `docs/evidence/v1.3/` | 🔜 Planned | Test suite passing — all 7 scripts |
+| v1.4 | `docs/evidence/v1.4/` | 🔜 Planned | Governance documents completed |
+| v1.5 | `docs/evidence/v1.5/` | 🔜 Planned | AI Verify Governance Report — final submission |
 
 ---
 
@@ -266,8 +289,8 @@ python src/ingestion/main.py
 
 | Document | Description |
 |----------|-------------|
-| [Session Progress Report](docs/Session_Progress_Report_12Mar2026.docx) | Detailed build log — v1.0 complete |
-| [AI Verify Gap Analysis](docs/AIVerify_Gap_Analysis.docx) | Full 11-principle gap map with prioritised action plan |
+| [AI Verify Gap Analysis v1.1](docs/AIVerify_Gap_Analysis_v1_1.docx) | Full 11-principle gap map — 8 gaps closed at v1.1 |
+| [AI Verify Gap Analysis v0.9](docs/AIVerify_Gap_Analysis_v0_9.docx) | Original baseline assessment |
 
 ---
 
