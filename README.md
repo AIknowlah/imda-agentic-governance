@@ -302,7 +302,7 @@ python src/ingestion/main.py
 - [x] v1.2 — Input hardening (prompt injection detection, rate limiting)
 - [x] v1.3 — Python test suite (7 test scripts)
 - [x] v1.4 — Governance documents (System Card, Materiality Assessment, Incident Response Plan)
-- [ ] v1.5 — AI Verify submission (Governance Report, Project Moonshot red-team results)
+- - [x] v1.5 — AI Verify submission (Governance Report)
 
 ## 📋 Changelog
 
