@@ -169,8 +169,11 @@ INJECTION_PATTERNS = [
     (re.compile(r'(bypass|override|circumvent|skip|disable)\s+(the\s+)?(rbac|security|access control|permission|role|filter|gate|hitl|audit)', re.IGNORECASE),
      "Security bypass attempt"),
 
-    (re.compile(r'show\s+(me\s+)?(all|every|hidden|restricted|sensitive|protected)\s+(fields?|data|records?|columns?|information)', re.IGNORECASE),
+    (re.compile(r'show\s+(me\s+)?((all|every|hidden|restricted|sensitive|protected)\s+)+(fields?|data|records?|columns?|information)', re.IGNORECASE),
      "Restricted data access attempt"),
+
+    (re.compile(r'(all|every)\s+(restricted|hidden|sensitive|protected)\s+(fields?|data|records?|columns?|information)', re.IGNORECASE),
+     "Restricted data access attempt: all restricted fields"),
 
     # --- SYSTEM PROMPT / CONTEXT MANIPULATION ---
     # Attempts to read, replace, or inject into system-level context.
