@@ -299,7 +299,7 @@ python src/ingestion/main.py
 - [x] v0.9 — Functional prototype
 - [x] v1.0 — Foundation hardening (SQL injection, error handling, UUID audit, HITL timeout)
 - [x] v1.1 — Two-person HITL gate (supervisor PIN, lockout, Gmail escalation)
-- [ ] v1.2 — Input hardening (prompt injection detection, rate limiting)
+- [x] v1.2 — Input hardening (prompt injection detection, rate limiting)
 - [ ] v1.3 — Python test suite (7 test scripts)
 - [ ] v1.4 — Governance documents (System Card, Materiality Assessment, Incident Response Plan)
 - [ ] v1.5 — AI Verify submission (Governance Report, Project Moonshot red-team results)
