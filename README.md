@@ -301,7 +301,7 @@ python src/ingestion/main.py
 - [x] v1.1 — Two-person HITL gate (supervisor PIN, lockout, Gmail escalation)
 - [x] v1.2 — Input hardening (prompt injection detection, rate limiting)
 - [x] v1.3 — Python test suite (7 test scripts)
-- [ ] v1.4 — Governance documents (System Card, Materiality Assessment, Incident Response Plan)
+- [x] v1.4 — Governance documents (System Card, Materiality Assessment, Incident Response Plan)
 - [ ] v1.5 — AI Verify submission (Governance Report, Project Moonshot red-team results)
 
 ## 📋 Changelog
@@ -311,7 +311,7 @@ python src/ingestion/main.py
 | v0.9 | 8 Mar 2026 | Functional prototype — core pipeline, RBAC, basic HITL, BigQuery audit log |
 | v1.0 | 12 Mar 2026 | Foundation hardening — SQL injection fix, error handling, UUID audit, HITL timeout, output labels |
 | v1.1 | 27 Mar 2026 | Two-person HITL gate — supervisor PIN verification, three-strike lockout, Gmail escalation to manager |
-
+| v1.4 | 29 Mar 2026 | Governance documents — System Card, Materiality Assessment, Incident Response Plan, Gap Analysis v1.3 |
 ---
 
 ## 👤 Author
